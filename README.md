@@ -54,3 +54,32 @@ Database files are excluded from Git.
 - React frontend
 - PostgreSQL
 - Automated tests and GitHub Actions CI
+
+
+
+## Weather Service
+
+The Weather Service uses Open-Meteo's public Geocoding API
+to search for locations.
+
+### Run
+
+```bash
+cd weather-service
+./mvnw spring-boot:run
+```
+
+Runs on port 8081.
+
+### Endpoint
+
+GET /api/locations?name=Boston
+
+Returns matching locations with name, country, latitude,
+and longitude.
+
+### Current status
+
+Location search is implemented.
+Weather forecasts and communication with the Trip Service
+are planned.
