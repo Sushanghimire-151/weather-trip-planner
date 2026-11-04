@@ -78,6 +78,30 @@ GET /api/locations?name=Boston
 Returns matching locations with name, country, latitude,
 and longitude.
 
+
+## API endpoints
+
+| Service | Method | Path | Purpose |
+|---|---|---|---|
+| Trip | GET | /api/trips | List trips |
+| Trip | POST | /api/trips | Create a trip |
+| Trip | PUT | /api/trips/{id} | Update a trip |
+| Trip | DELETE | /api/trips/{id} | Delete a trip |
+| Weather | GET | /api/locations?name=Boston | Search locations |
+| Weather | GET | /api/weather?latitude=42.36&longitude=-71.06 | Get a three-day forecast |
+
+Trip Service runs on port 8080.
+Weather Service runs on port 8081.
+
+Forecast temperatures use Celsius.
+Precipitation probability is expressed as a percentage.
+
+## API testing
+
+Import the collection from the postman directory.
+Start the required services before running requests.
+Weather requests require internet access.
+
 ### Current status
 
 Location search is implemented.
