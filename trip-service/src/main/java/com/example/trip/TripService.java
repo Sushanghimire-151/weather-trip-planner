@@ -1,5 +1,7 @@
 package com.example.trip;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,9 +11,14 @@ import org.springframework.stereotype.Service;
 public class TripService {
 
     private final TripRepository repository;
+    private final WeatherLocationClient locationClient;
 
-    public TripService(TripRepository repository) {
+    public TripService(
+            TripRepository repository,
+            WeatherLocationClient locationClient
+    ) {
         this.repository = repository;
+        this.locationClient = locationClient;
     }
 
     public List<TripResponse> getTrips() {
@@ -30,8 +37,27 @@ public class TripService {
     }
 
     public TripResponse createTrip(TripRequest request) {
+        String destination = request.destination().trim();
+
+        if (destination.length() < 2) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Destination must contain at least two characters"
+            );
+        }
+
+        List<LocationLookupResponse> matches =
+                locationClient.search(destination);
+
+        if (matches.isEmpty()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "No matching locations were found"
+            );
+        }
+
         Trip trip = new Trip(
-                request.destination().trim(),
+                destination,
                 request.notes()
         );
 

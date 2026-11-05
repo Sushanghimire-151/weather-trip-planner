@@ -3,6 +3,9 @@ package com.example.trip;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +39,17 @@ public class ApiExceptionHandler {
             TripNotFoundException exception
     ) {
         return Map.of("message", exception.getMessage());
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<Map<String, String>> handleStatusException(
+            ResponseStatusException exception
+    ) {
+        String message = exception.getReason() != null
+                ? exception.getReason()
+                : "Request could not be completed";
+
+        return ResponseEntity.status(exception.getStatusCode())
+                .body(Map.of("message", message));
     }
 }

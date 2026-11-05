@@ -102,8 +102,16 @@ Import the collection from the postman directory.
 Start the required services before running requests.
 Weather requests require internet access.
 
-### Current status
+## Service communication
 
-Location search is implemented.
-Weather forecasts and communication with the Trip Service
-are planned.
+When creating a trip, the Trip Service calls the Weather Service's
+location-search endpoint before saving.
+
+- A search with matches allows creation.
+- No matches returns 400.
+- An unavailable lookup returns 503, and the trip is not saved.
+
+This checks for search matches only. It does not select a unique
+location or persist coordinates.
+
+Destination updates do not yet perform this lookup.
